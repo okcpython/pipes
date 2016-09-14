@@ -230,7 +230,7 @@ Here's the expected output::
 How to Participate and Judging
 ------------------------------
 
-Submissions should be emailed to <email address pending> by November 1st, 2016.
+Submissions should be emailed to pipes@okcpython.org by November 1st, 2016.
 Please include instructions on how to run your program and any setup that is necessary.
 
 Submissions will be judged first on correctness, then on speed of execution.
