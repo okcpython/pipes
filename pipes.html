@@ -1,0 +1,679 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.12: http://docutils.sourceforge.net/" />
+<title>Pipes</title>
+<style type="text/css">
+
+/*
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 7614 2013-02-21 15:55:51Z milde $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+object[type="image/svg+xml"], object[type="application/x-shockwave-flash"] {
+  overflow: hidden;
+}
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title, .code .error {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin: 0 0 0.5em 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left, .figure.align-left, object.align-left {
+  clear: left ;
+  float: left ;
+  margin-right: 1em }
+
+img.align-right, .figure.align-right, object.align-right {
+  clear: right ;
+  float: right ;
+  margin-left: 1em }
+
+img.align-center, .figure.align-center, object.align-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.align-left {
+  text-align: left }
+
+.align-center {
+  clear: both ;
+  text-align: center }
+
+.align-right {
+  text-align: right }
+
+/* reset inner alignment in figures */
+div.align-right {
+  text-align: inherit }
+
+/* div.align-center * { */
+/*   text-align: left } */
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font: inherit }
+
+pre.literal-block, pre.doctest-block, pre.math, pre.code {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+pre.code .ln { color: grey; } /* line numbers */
+pre.code, code { background-color: #eeeeee }
+pre.code .comment, code .comment { color: #5C6576 }
+pre.code .keyword, code .keyword { color: #3B0D06; font-weight: bold }
+pre.code .literal.string, code .literal.string { color: #0C5404 }
+pre.code .name.builtin, code .name.builtin { color: #352B84 }
+pre.code .deleted, code .deleted { background-color: #DEB0A1}
+pre.code .inserted, code .inserted { background-color: #A3D289}
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+/* "booktabs" style (no vertical lines) */
+table.docutils.booktabs {
+  border: 0px;
+  border-top: 2px solid;
+  border-bottom: 2px solid;
+  border-collapse: collapse;
+}
+table.docutils.booktabs * {
+  border: 0px;
+}
+table.docutils.booktabs th {
+  border-bottom: thin solid;
+  text-align: left;
+}
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+</head>
+<body>
+<div class="document" id="pipes">
+<h1 class="title">Pipes</h1>
+
+<img alt="doc_images/b2_partial.png" class="align-center" src="doc_images/b2_partial.png" style="width: 483px; height: 690px;" />
+<div class="section" id="description">
+<h1>Description</h1>
+<p>The game is simple.  Given a series of pipes, figure out what rotation each tile
+should have so that the gas flows to every house.  It is not necessary that
+every pipe be used.  Gas flows from any gas tank to every connected pipe.  The
+pipe lines wrap around both horizontally and vertically (meaning that if I have
+gas flowing out of the bottom of the board, it will provide gas to the top tile
+of the same column if it has a pipe to receive it).  A Gas tank can have 1, 2,
+or three pipes connected to it.  There are three kinds of pipes, three kinds of
+Gas tanks, houses, and blank tiles.</p>
+</div>
+<div class="section" id="tile-types">
+<h1>Tile Types</h1>
+<div class="section" id="blank-tiles">
+<h2>Blank Tiles</h2>
+<p>Blank Tiles are just tiles that have nothing interesting in the location.  Gas
+cannot flow through them.</p>
+<img alt="images/blank.png" src="images/blank.png" style="width: 138px; height: 138px;" />
+</div>
+<div class="section" id="l-pipe">
+<h2>L Pipe</h2>
+<p>L Pipes with an elbow bend in them, and can be oriented in 4
+different directions.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="61%" />
+<col width="39%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">L Pipe</th>
+<th class="head">Direction</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><img alt="images/l_on_north.png" class="first last" src="images/l_on_north.png" />
+</td>
+<td>North</td>
+</tr>
+<tr><td><img alt="images/l_on_east.png" class="first last" src="images/l_on_east.png" />
+</td>
+<td>East</td>
+</tr>
+<tr><td><img alt="images/l_on_south.png" class="first last" src="images/l_on_south.png" />
+</td>
+<td>South</td>
+</tr>
+<tr><td><img alt="images/l_on_west.png" class="first last" src="images/l_on_west.png" />
+</td>
+<td>West</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="i-pipe">
+<h2>I Pipe</h2>
+<p>I Pipes are straight, either vertically or horizontally aligned.  While you are
+allowed to orient them in 4 directions (North, South, East, West), there is no
+difference to the game mechanics if the I Pipe is North vs. South, or East
+vs. West.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="61%" />
+<col width="39%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">I Pipe</th>
+<th class="head">Direction</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><img alt="images/i_on_north.png" class="first last" src="images/i_on_north.png" />
+</td>
+<td>North &amp; South</td>
+</tr>
+<tr><td><img alt="images/i_on_east.png" class="first last" src="images/i_on_east.png" />
+</td>
+<td>East &amp; West</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="t-pipe">
+<h2>T Pipe</h2>
+<p>T Pipes have two pipes meeting in a T intersection.  They can be aligned in all
+4 directions.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="61%" />
+<col width="39%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">T Pipe</th>
+<th class="head">Direction</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><img alt="images/t_on_north.png" class="first last" src="images/t_on_north.png" />
+</td>
+<td>North</td>
+</tr>
+<tr><td><img alt="images/t_on_east.png" class="first last" src="images/t_on_east.png" />
+</td>
+<td>East</td>
+</tr>
+<tr><td><img alt="images/t_on_south.png" class="first last" src="images/t_on_south.png" />
+</td>
+<td>South</td>
+</tr>
+<tr><td><img alt="images/t_on_west.png" class="first last" src="images/t_on_west.png" />
+</td>
+<td>West</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="gas-tank">
+<h2>Gas Tank</h2>
+<p>Gas Tanks are the source of gas.  If a pipe is adjacent to one of its pipes,
+gas will flow into it.  There is no limit on how far gas can flow from a Gas
+Tank.  There will often be more than one Gas Tank per level.</p>
+<p>There are three types of Gas Tanks, each only differing in how many pipes are
+connected to them.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="61%" />
+<col width="39%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">One Pipe Gas Tank</th>
+<th class="head">Direction</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><img alt="images/gas_north.png" class="first last" src="images/gas_north.png" />
+</td>
+<td>North</td>
+</tr>
+<tr><td><img alt="images/gas_east.png" class="first last" src="images/gas_east.png" />
+</td>
+<td>East</td>
+</tr>
+<tr><td><img alt="images/gas_south.png" class="first last" src="images/gas_south.png" />
+</td>
+<td>South</td>
+</tr>
+<tr><td><img alt="images/gas_west.png" class="first last" src="images/gas_west.png" />
+</td>
+<td>West</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="63%" />
+<col width="37%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Two Pipe Gas Tank</th>
+<th class="head">Direction</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><img alt="images/gas_north_east.png" class="first last" src="images/gas_north_east.png" />
+</td>
+<td>North</td>
+</tr>
+<tr><td><img alt="images/gas_south_east.png" class="first last" src="images/gas_south_east.png" />
+</td>
+<td>East</td>
+</tr>
+<tr><td><img alt="images/gas_south_west.png" class="first last" src="images/gas_south_west.png" />
+</td>
+<td>South</td>
+</tr>
+<tr><td><img alt="images/gas_north_west.png" class="first last" src="images/gas_north_west.png" />
+</td>
+<td>West</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="62%" />
+<col width="38%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Three Pipe Gas Tank</th>
+<th class="head">Direction</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><img alt="images/gas_not_south.png" class="first last" src="images/gas_not_south.png" />
+</td>
+<td>North</td>
+</tr>
+<tr><td><img alt="images/gas_not_west.png" class="first last" src="images/gas_not_west.png" />
+</td>
+<td>East</td>
+</tr>
+<tr><td><img alt="images/gas_not_north.png" class="first last" src="images/gas_not_north.png" />
+</td>
+<td>South</td>
+</tr>
+<tr><td><img alt="images/gas_not_east.png" class="first last" src="images/gas_not_east.png" />
+</td>
+<td>West</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="house">
+<h2>House</h2>
+<p>Each House only has one pipe, and it can be oriented in all 4 directions.  A
+level is not considered complete until gas is flowing to every house.</p>
+</div>
+</div>
+<div class="section" id="input">
+<h1>Input</h1>
+<p>A level is described using a simple text file describing a board.  Each board
+is always 7x10.  Here is an example board:</p>
+<pre class="literal-block">
+_______
+__HH__H
+__II_HT
+_HLTHIT
+_TIT__I
+_I_H_HI
+_IH__TL
+_LTTIL_
+___I___
+___1___
+</pre>
+<div class="section" id="symbols">
+<h2>Symbols</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="19%" />
+<col width="81%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Symbol</td>
+<td>Meaning</td>
+</tr>
+<tr><td>_</td>
+<td>Represents a blank tile</td>
+</tr>
+<tr><td>H</td>
+<td>Represents a House</td>
+</tr>
+<tr><td>I</td>
+<td>Represents an I Pipe</td>
+</tr>
+<tr><td>L</td>
+<td>Represents an L Pipe</td>
+</tr>
+<tr><td>T</td>
+<td>Represents a T Pipe</td>
+</tr>
+<tr><td>1</td>
+<td>Represents a One Pipe Gas Tank</td>
+</tr>
+<tr><td>2</td>
+<td>Represents a Two Pipe Gas Tank</td>
+</tr>
+<tr><td>3</td>
+<td>Represents a Three Pipe Gas Tank</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="output">
+<h1>Output</h1>
+<p>The expected output is a 7x10 character text file, similar to the input.  The
+difference is that instead of a symbol describing the type of tile, you instead
+provide an orientation to each non-blank tile:</p>
+<pre class="literal-block">
+_______
+__SS__S
+__NN_EW
+_SNWEEW
+_EEW__N
+_N_N_SN
+_NS__EW
+_NNSEW_
+___N___
+___N___
+</pre>
+<p>N, E, S, W mean North, East, South, and West, respectively.  The underscore is
+used for each blank tile.  For I Pipes, there is no difference between N and S,
+or E and W.</p>
+</div>
+<div class="section" id="board-wrap-around">
+<h1>Board Wrap-Around</h1>
+<p>As mentioned in the introductory description, pipes can wrap both vertically
+and horizontally around the board.</p>
+<img alt="doc_images/wrap.png" src="doc_images/wrap.png" style="width: 483px; height: 690px;" />
+<p>Here's the input for this board:</p>
+<pre class="literal-block">
+_I_____
+I2___HI
+_______
+_______
+_______
+_______
+_______
+_______
+_H_____
+_I_____
+</pre>
+<p>Here's the expected output:</p>
+<pre class="literal-block">
+_N_____
+EW___EE
+_______
+_______
+_______
+_______
+_______
+_______
+_S_____
+_N_____
+</pre>
+</div>
+<div class="section" id="how-to-participate-and-judging">
+<h1>How to Participate and Judging</h1>
+<p>Submissions should be emailed to &lt;email address pending&gt; by November 1st, 2016.
+Please include instructions on how to run your program and any setup that is necessary.</p>
+<p>Submissions will be judged first on correctness, then on speed of execution.
+So if two contestants' submissions get the same number of problems correct, the
+contestant who had the faster running submission will be considered the winner.</p>
+</div>
+</div>
+</body>
+</html>

@@ -1,12 +1,14 @@
 Pipes
 =====
 
-Description
------------
 
 .. image:: doc_images/b2_partial.png
    :height: 690
    :width: 483
+   :align: center
+
+Description
+-----------
 
 The game is simple.  Given a series of pipes, figure out what rotation each tile
 should have so that the gas flows to every house.  It is not necessary that
@@ -224,3 +226,13 @@ Here's the expected output::
     _______
     _S_____
     _N_____
+
+How to Participate and Judging
+------------------------------
+
+Submissions should be emailed to <email address pending> by November 1st, 2016.
+Please include instructions on how to run your program and any setup that is necessary.
+
+Submissions will be judged first on correctness, then on speed of execution.
+So if two contestants' submissions get the same number of problems correct, the
+contestant who had the faster running submission will be considered the winner.
