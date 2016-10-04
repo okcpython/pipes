@@ -21,6 +21,7 @@ class MyTile(object):
         self.board = board
         self.orientation = orientation
         self.locked = False
+        self.visited = False
         self.connected_neighbors = []
 
     ###################################################################
@@ -30,7 +31,7 @@ class MyTile(object):
     ###################################################################
     def get_readable_orientation(self):
         if not self.is_empty():
-            tile = unicode(self.TILE_ORIENTATIONS_MAP[self.orientation])
+            tile = u"{}".format(self.TILE_ORIENTATIONS_MAP[self.orientation])
         else:
             tile = u'_'
         return tile
@@ -52,39 +53,110 @@ class MyTile(object):
         return self.locked
 
     ###################################################################
+    def can_rotate(self):
+        # TODO: Respect a locked status?
+        return True
+
+    ###################################################################
+    def has_been_visited(self):
+        return self.visited
+
+    ###################################################################
+    def _connections(self):
+        # return the orientations that can connect for this tile
+        if self.tile_type == 'I':
+            if self.orientation in (1, 3):
+                return (1, 3)
+            elif self.orientation in (2, 4):
+                return (2, 4)
+        elif self.tile_type in ('L', '2'):
+            if self.orientation < 4:
+                return (self.orientation, self.orientation + 1)
+            else:
+                return (self.orientation, 1)
+        elif self.tile_type in ('T', '3'):
+            if self.orientation == 1:
+                return (4, 1, 2)
+            elif self.orientation == 2:
+                return (1, 2, 3)
+            elif self.orientation == 3:
+                return (2, 3, 4)
+            else:
+                return (3, 4, 1)
+        elif self.tile_type in ('1', 'H'):
+            return (self.orientation,)
+
+    ###################################################################
     def tiles_are_connected(self, neighbor):
-        if self.orientation == 1 and neighbor.orientation == 3 and self.get_northern_neighbor() == neighbor:
-            return True
-        if self.orientation == 2 and neighbor.orientation == 4 and self.get_eastern_neighbor() == neighbor:
-            return True
-        if self.orientation == 3 and neighbor.orientation == 1 and self.get_southern_neighbor() == neighbor:
-            return True
-        if self.orientation == 4 and neighbor.orientation == 2 and self.get_western_neighbor() == neighbor:
-            return True
+        my_endpoints = self._connections()
+        neighbor_endpoints = neighbor._connections()
+        if not neighbor_endpoints:
+            return False
+        for endpoint in my_endpoints:
+            appears_connected = False
+            if endpoint == 1 and 3 in neighbor_endpoints and self.get_northern_neighbor() == neighbor:
+                appears_connected = True
+            if endpoint == 2 and 4 in neighbor_endpoints and self.get_eastern_neighbor() == neighbor:
+                appears_connected = True
+            if endpoint == 3 and 1 in neighbor_endpoints and self.get_southern_neighbor() == neighbor:
+                appears_connected = True
+            if endpoint == 4 and 2 in neighbor_endpoints and self.get_western_neighbor() == neighbor:
+                appears_connected = True
+            if appears_connected:
+                # Do a tile type specific check
+                if self.tile_type == 'T' and neighbor.is_house():
+                    # Make sure the middle of the T is facing the house
+                    if not abs(self.orientation - neighbor.orientation) == 2:
+                        appears_connected = False
+            if appears_connected:
+                return True
         return False
 
     ###################################################################
     def _can_rotate_neighbor_to_connect(self, neighbor):
-        if neighbor.is_locked():
+        if neighbor.is_house() and neighbor.is_locked():
+            # We will never unlock a house as it is always a one end terminus
             return False
         return True
 
     ###################################################################
+    def _connect_deux(self, neighbor):
+        # Try all self and neighbor permutations, and take the one with the highest num connections
+        connected_neighbors_begin = list(self.connected_neighbors)
+        neighbors_connections_begin = list(neighbor.connected_neighbors)
+        my_orientation_begin = self.orientation
+        neighbor_orientation_begin = neighbor.orientation
+        best_so_far = ()
+        for my_orientation in ():
+            self.orientation = my_orientation
+            for neighbor_orientation in ():
+                neighbor.orientation = neighbor_orientation
+                self.get_connected_neighbors()
+                neighbor.get_connected_neighbors()
+                total_connections = len(self.connected_neighbors) + len(neighbor.connected_neighbors)
+                if total_connections >= len(connected_neighbors_begin) + len(neighbors_connections_begin):
+                    return True
+        return False
+
+    ###################################################################
     def _connect_tiles(self, neighbor):
-        # do the low level rotating to line things up
+        connected = False
         if self._can_rotate_neighbor_to_connect(neighbor):
             for x in range(4):
                 if self.tiles_are_connected(neighbor):
+                    connected = True
                     break
                 else:
                     neighbor.rotate()
-                    if not self.is_locked():
+                    if self.can_rotate():
                         self.rotate()
                         if self.tiles_are_connected(neighbor):
+                            connected = True
                             break
                         else:
+                            # reset
                             self.rotate(num_rotations=3)
-        if self.tiles_are_connected(neighbor):
+        if connected:
             # TODO: allow for backtracking and unlocking tiles
             self.locked = True
             neighbor.locked = True
@@ -96,6 +168,9 @@ class MyTile(object):
     def connect(self, neighbor):
         # orient neighbor with self, and return if successful
         if neighbor.is_empty():
+            return False
+
+        if neighbor in self.connected_neighbors:
             return False
 
         if self.tiles_are_connected(neighbor):
@@ -127,7 +202,7 @@ class MyTile(object):
     ###################################################################
     def get_eastern_neighbor(self):
         x = None
-        if self.x == self.board.width:
+        if self.x == self.board.width - 1:
             x = 0
         else:
             x = self.x + 1
@@ -136,7 +211,7 @@ class MyTile(object):
     ###################################################################
     def get_southern_neighbor(self):
         y = None
-        if self.y == self.board.height:
+        if self.y == self.board.height - 1:
             y = 0
         else:
             y = self.y + 1
@@ -157,6 +232,17 @@ class MyTile(object):
             self.get_northern_neighbor(), self.get_eastern_neighbor(),
             self.get_southern_neighbor(), self.get_western_neighbor()
         )
+
+    ###################################################################
+    def get_connected_neighbors(self, refresh_stored_connections=True):
+        neighbors = self.get_neighbors()
+        connected_neighbors = []
+        for neighbor in neighbors:
+            if self.tiles_are_connected(neighbor):
+                connected_neighbors.append(neighbor)
+        if refresh_stored_connections:
+            self.connected_neighbors = connected_neighbors
+        return connected_neighbors
 
     ###################################################################
     def rotate(self, num_rotations=1):
@@ -197,36 +283,42 @@ class MyBoard(object):
         return self.board[y][x]
 
     ###################################################################
-    def find_starting_point(self):
+    def find_starting_points(self):
+        gas_tanks = []
         for y in range(self.height):
             for x in range(self.width):
                 if self.board[y][x].is_gas_tank():
-                    return self.board[y][x]
+                    gas_tanks.append(self.board[y][x])
+        return gas_tanks
 
     ###################################################################
     def find_path(self, starting_tiles):
         continue_with = []
         for starting_tile in starting_tiles:
+
+            starting_tile.visited = True
             neighbors = starting_tile.get_neighbors()
             for neighbor in neighbors:
                 connected = starting_tile.connect(neighbor)
-                if connected and neighbor not in starting_tile.connected_neighbors:
-                    starting_tile.connected_neighbors.append(neighbor)
-                # if connected and starting_tile not in neighbor.connected_neighbors:
-                #     neighbor.connected_neighbors.append(starting_tile)
+
+                # if connected and neighbor not in starting_tile.connected_neighbors:
+                #     starting_tile.connected_neighbors.append(neighbor)
+
                 if connected and neighbor.is_house():
-                    # TODO: Verify path back to start
-                    return  # Success
-                if connected and neighbor not in continue_with:
+                    # TODO: Verify successful paths?
+                    print("Yeah, connected {0} with {1}".format((starting_tile), (neighbor)))
+
+                if connected and neighbor not in continue_with and not neighbor.has_been_visited():
                     continue_with.append(neighbor)
+
         if continue_with:
             self.find_path(continue_with)
 
     ###################################################################
     def solve(self):
-        sp = self.find_starting_point()
+        sp = self.find_starting_points()
         if sp:
-            self.find_path([sp])
+            self.find_path(sp)
 
     ###################################################################
     def write_output_board_to_file(self, filename):
@@ -253,10 +345,9 @@ def solve_board(board_start, output_filename="board.png"):
     # Get solution to/from file
     filename = "my_solution_{}".format(os.path.basename(board_start))
     my_board.write_output_board_to_file(filename)
-    solved_board = 'example_boards/board0_solution.txt'
 
     # construct board and print
-    board = Board(board_start, solved_board)
+    board = Board(board_start, filename)
     draw_board(board, output_filename)
 
 
@@ -264,7 +355,6 @@ def solve_board(board_start, output_filename="board.png"):
 def main():
     parser = argparse.ArgumentParser("Solve a board in a particular state")
     parser.add_argument("board", help="filename for board")
-    parser.add_argument("state", help="filename for a board's state")
     parser.add_argument("--output", default="board.png",
                         help="filename for output image. Default: board.png")
     args = parser.parse_args()
