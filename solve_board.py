@@ -54,7 +54,9 @@ class MyTile(object):
 
     ###################################################################
     def can_rotate(self):
-        # TODO: Respect a locked status?
+        if self.is_house() and self.is_locked():
+            # We will never unlock a house as it is always a one end terminus
+            return False
         return True
 
     ###################################################################
@@ -103,12 +105,6 @@ class MyTile(object):
             if endpoint == 4 and 2 in neighbor_endpoints and self.get_western_neighbor() == neighbor:
                 appears_connected = True
             if appears_connected:
-                # Do a tile type specific check
-                if self.tile_type == 'T' and neighbor.is_house():
-                    # Make sure the middle of the T is facing the house
-                    if not abs(self.orientation - neighbor.orientation) == 2:
-                        appears_connected = False
-            if appears_connected:
                 return True
         return False
 
@@ -120,27 +116,9 @@ class MyTile(object):
         return True
 
     ###################################################################
-    def _connect_deux(self, neighbor):
-        # Try all self and neighbor permutations, and take the one with the highest num connections
-        connected_neighbors_begin = list(self.connected_neighbors)
-        neighbors_connections_begin = list(neighbor.connected_neighbors)
-        my_orientation_begin = self.orientation
-        neighbor_orientation_begin = neighbor.orientation
-        best_so_far = ()
-        for my_orientation in ():
-            self.orientation = my_orientation
-            for neighbor_orientation in ():
-                neighbor.orientation = neighbor_orientation
-                self.get_connected_neighbors()
-                neighbor.get_connected_neighbors()
-                total_connections = len(self.connected_neighbors) + len(neighbor.connected_neighbors)
-                if total_connections >= len(connected_neighbors_begin) + len(neighbors_connections_begin):
-                    return True
-        return False
-
-    ###################################################################
     def _connect_tiles(self, neighbor):
         connected = False
+        best_so_far = (self.orientation, neighbor.orientation)
         if self._can_rotate_neighbor_to_connect(neighbor):
             for x in range(4):
                 if self.tiles_are_connected(neighbor):
@@ -149,17 +127,22 @@ class MyTile(object):
                 else:
                     neighbor.rotate()
                     if self.can_rotate():
-                        self.rotate()
-                        if self.tiles_are_connected(neighbor):
-                            connected = True
-                            break
-                        else:
-                            # reset
-                            self.rotate(num_rotations=3)
+                        for y in range(4):
+                            num_c_start = self.get_connected_neighbors(refresh_stored_connections=False)
+                            self.rotate()
+                            if self.tiles_are_connected(neighbor):
+                                num_connections = self.get_connected_neighbors()
+                                if len(num_connections) > len(num_c_start):
+                                    best_so_far = (self.orientation, neighbor.orientation)
+                                connected = True
         if connected:
-            # TODO: allow for backtracking and unlocking tiles
-            self.locked = True
-            neighbor.locked = True
+            self.orientation = best_so_far[0]
+            neighbor.orientation = best_so_far[1]
+            if self.is_house():
+                self.locked = True
+            if neighbor.is_house():
+                neighbor.locked = True
+            self.get_connected_neighbors()
             return True
         return False
 
@@ -167,16 +150,13 @@ class MyTile(object):
     ###################################################################
     def connect(self, neighbor):
         # orient neighbor with self, and return if successful
-        if neighbor.is_empty():
+        if neighbor.is_empty() or self.is_empty():
             return False
 
-        if neighbor in self.connected_neighbors:
-            return False
-
-        if self.tiles_are_connected(neighbor):
+        if neighbor in self.get_connected_neighbors():
             return True
 
-        elif self.is_gas_tank() and neighbor.is_pipe():
+        if self.is_gas_tank() and neighbor.is_pipe():
             return self._connect_tiles(neighbor)
         elif self.is_gas_tank() and neighbor.is_house():
             return self._connect_tiles(neighbor)
@@ -301,12 +281,8 @@ class MyBoard(object):
             for neighbor in neighbors:
                 connected = starting_tile.connect(neighbor)
 
-                # if connected and neighbor not in starting_tile.connected_neighbors:
-                #     starting_tile.connected_neighbors.append(neighbor)
-
                 if connected and neighbor.is_house():
-                    # TODO: Verify successful paths?
-                    print("Yeah, connected {0} with {1}".format((starting_tile), (neighbor)))
+                    print("Connected {0} with {1}".format((starting_tile), (neighbor)))
 
                 if connected and neighbor not in continue_with and not neighbor.has_been_visited():
                     continue_with.append(neighbor)
