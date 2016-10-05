@@ -90,6 +90,7 @@ class MyTile(object):
 
     ###################################################################
     def tiles_are_connected(self, neighbor):
+        # Utility method for iterating through the different ways to tiles can connect
         my_endpoints = self._connections()
         neighbor_endpoints = neighbor._connections()
         if not neighbor_endpoints:
@@ -117,13 +118,15 @@ class MyTile(object):
 
     ###################################################################
     def _connect_tiles(self, neighbor):
+        # Iterate through the various combinations and see if we can rotate
+        # ourselves and the neighbor into a more advantageous fit
+
         connected = False
         best_so_far = (self.orientation, neighbor.orientation)
         if self._can_rotate_neighbor_to_connect(neighbor):
             for x in range(4):
                 if self.tiles_are_connected(neighbor):
                     connected = True
-                    break
                 else:
                     neighbor.rotate()
                     if self.can_rotate():
@@ -135,6 +138,7 @@ class MyTile(object):
                                 if len(num_connections) > len(num_c_start):
                                     best_so_far = (self.orientation, neighbor.orientation)
                                 connected = True
+
         if connected:
             self.orientation = best_so_far[0]
             neighbor.orientation = best_so_far[1]
@@ -142,29 +146,19 @@ class MyTile(object):
                 self.locked = True
             if neighbor.is_house():
                 neighbor.locked = True
-            self.get_connected_neighbors()
+            self.get_connected_neighbors()  # refresh
             return True
         return False
 
 
     ###################################################################
     def connect(self, neighbor):
-        # orient neighbor with self, and return if successful
+        # attempt to orient neighbor with self, and return if successful
+
         if neighbor.is_empty() or self.is_empty():
             return False
 
-        if neighbor in self.get_connected_neighbors():
-            return True
-
-        if self.is_gas_tank() and neighbor.is_pipe():
-            return self._connect_tiles(neighbor)
-        elif self.is_gas_tank() and neighbor.is_house():
-            return self._connect_tiles(neighbor)
-        elif self.is_pipe() and neighbor.is_pipe():
-            return self._connect_tiles(neighbor)
-        elif self.is_pipe() and neighbor.is_house():
-            return self._connect_tiles(neighbor)
-        return False
+        return self._connect_tiles(neighbor)
 
     ###################################################################
     def is_house(self):
@@ -215,6 +209,10 @@ class MyTile(object):
 
     ###################################################################
     def get_connected_neighbors(self, refresh_stored_connections=True):
+        # Return the neighbors of self that are connected to self
+
+        # optionally set the connected_neigbors attribute on self
+        # to what we find
         neighbors = self.get_neighbors()
         connected_neighbors = []
         for neighbor in neighbors:
@@ -238,6 +236,7 @@ class MyTile(object):
 class MyBoard(object):
     ###################################################################
     def __init__(self, board_start):
+        # Store the board in a doubly nested dict
         self.board = {}
         self.width = 7
         self.height = 10
@@ -247,6 +246,7 @@ class MyBoard(object):
                     self.board[y] = {}
                 self.board[y][x] = None
 
+        # read in the board from a file and store it in our board
         f = io.open(board_start)
         lines = f.readlines()
         f.close()
@@ -264,6 +264,7 @@ class MyBoard(object):
 
     ###################################################################
     def find_starting_points(self):
+        # iterate through the board and return a list of all gas tanks
         gas_tanks = []
         for y in range(self.height):
             for x in range(self.width):
@@ -273,6 +274,9 @@ class MyBoard(object):
 
     ###################################################################
     def find_path(self, starting_tiles):
+        # Implement a basic, recursive BFS algorithm, visiting paths
+        # that start with the gas tanks
+
         continue_with = []
         for starting_tile in starting_tiles:
 
@@ -281,10 +285,9 @@ class MyBoard(object):
             for neighbor in neighbors:
                 connected = starting_tile.connect(neighbor)
 
-                if connected and neighbor.is_house():
-                    print("Connected {0} with {1}".format((starting_tile), (neighbor)))
-
                 if connected and neighbor not in continue_with and not neighbor.has_been_visited():
+                    # We have a path forward, and haven't visited this neighbor yet,
+                    # so add them to the list to visit next
                     continue_with.append(neighbor)
 
         if continue_with:
@@ -298,7 +301,7 @@ class MyBoard(object):
 
     ###################################################################
     def write_output_board_to_file(self, filename):
-        # return a formatted, solved board in a file-like object
+        # write a formatted, solved board to a file
         f = io.open(filename, mode="w")
         for y in range(self.height):
             line = []
