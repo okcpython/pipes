@@ -5,7 +5,11 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import argparse
+import os
 from PIL import Image
+
+base = os.path.dirname(__file__)
+image_folder = os.path.join(base, "images")
 
 
 ORIENTATIONS = range(4)
@@ -38,19 +42,19 @@ def get_opposite_orientation(orientation):
 
 ########################################################################
 def make_image_map():
-    image_map = {"_": Image.open("images/blank.png"),
-                 ("2", NORTH): Image.open("images/gas_north_east.png"),
-                 ("2", EAST): Image.open("images/gas_south_east.png"),
-                 ("2", SOUTH): Image.open("images/gas_south_west.png"),
-                 ("2", WEST): Image.open("images/gas_north_west.png")}
+    image_map = {"_": Image.open(os.path.join(image_folder, "blank.png")),
+                 ("2", NORTH): Image.open(os.path.join(image_folder, "gas_north_east.png")),
+                 ("2", EAST): Image.open(os.path.join(image_folder, "gas_south_east.png")),
+                 ("2", SOUTH): Image.open(os.path.join(image_folder, "gas_south_west.png")),
+                 ("2", WEST): Image.open(os.path.join(image_folder, "gas_north_west.png"))}
 
     for orientation in ORIENTATIONS:
         orientation_name = ORIENTATION_NAME_MAP[orientation]
         opposite_name = ORIENTATION_NAME_MAP[get_opposite_orientation(orientation)]
-        image_map["1", orientation] = Image.open("images/gas_%s.png" % orientation_name)
-        image_map["3", orientation] = Image.open("images/gas_not_%s.png" % opposite_name)
+        image_map["1", orientation] = Image.open(os.path.join(image_folder, "gas_%s.png" % orientation_name))
+        image_map["3", orientation] = Image.open(os.path.join(image_folder, "gas_not_%s.png" % opposite_name))
         for on in ["on", "off"]:
-            filename_template = "images/%s_{}_{}.png".format(on, orientation_name)
+            filename_template = os.path.join(image_folder, "%s_{}_{}.png".format(on, orientation_name))
             for letter in "itlh":
                 im = Image.open(filename_template % letter)
                 image_map[letter.upper(), orientation_name, on] = im

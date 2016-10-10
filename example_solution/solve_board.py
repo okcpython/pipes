@@ -1,6 +1,8 @@
 import argparse
 import io
 import os
+import sys
+sys.path.append("..")
 
 from draw_board import Board, draw_board
 
