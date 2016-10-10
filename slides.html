@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pipes Solver Implementation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style type="text/css">
+        code {
+            background-color: #f0f0f0;
+        }
+        /* Slideshow styles */
+    </style>
+</head>
+<body>
+<textarea id="source">
+
+class: center, middle
+
+# Solving The Pipes Problem
+--
+
+### (AKA Diving into Toby's brain...and surviving...hopefully)
+
+---
+
+class: center, middle
+
+# How I tried to solve the problem...
+
+---
+
+class: center, middle
+
+# Define the problem
+
+---
+
+class: center, middle
+
+# We have a number of discrete points must be connected with respect to direction
+
+--
+
+### This looked to me like a pathing (graph) problem
+--
+
+### DFS, BFS, A*, etc...
+
+---
+
+
+class: center, middle
+
+# Scope the Problem
+
+--
+
+### (Limited: The Board is Not Infinite)
+
+--
+### No worries about stack/heap space, etc...
+
+
+---
+
+class: center, middle
+
+# So I chose to implement Breadth First Search
+
+--
+
+### I don't think it really made a difference--just needed to pick one
+
+---
+
+class: center, middle
+
+# Getting Started
+
+---
+class: center, middle
+
+# Define the board
+
+--
+
+### Doubly-nested dictionary with row major ordering (y, x)
+
+--
+
+### Each coordinate was a tile with a type and orientation (default N)
+
+---
+
+class: center, middle
+
+# Traverse the board and try different possibilities
+
+---
+class: center, middle
+
+# Start with a list of all gas tanks
+
+---
+class: center, middle
+
+# For each item in the list, mark the tile as visited and try all possibilities with each neighbor
+
+---
+class: center, middle
+
+# For each possibility, score how many connections are made
+
+---
+class: center, middle
+
+# Set the tile and its currently examined neighbor to the orientation with the highest score
+
+---
+class: center, middle
+
+# If we make a connection at all, and the neigbor has not been visited yet, add them to the list to visit
+
+---
+class: center, middle
+
+# Note: If a tile is a house, and it is connected, leave it alone (houses only have one connectable edge)
+
+---
+
+class: center, middle
+
+#  Things I learned:
+
+---
+
+class: center, middle
+
+# Greedy works pretty well in most cases
+
+--
+
+### Making the best choice at the time tended to work pretty well
+
+---
+
+class: center, middle
+
+# Test all possibilities instead of trying to be too clever
+
+--
+
+### Moved from a strategic approach to just testing all permutations of each tile with its neighbors
+
+
+---
+
+class: center, middle
+
+# Don't be clever (did I already mention that?)
+
+--
+
+### Like Forrest, I am not a smart man.  Be Basic. Iterate. Solutions will reveal themselves.
+
+---
+
+class: center, middle
+
+# Write utility methods early so it is easier to tweak strategies
+
+--
+### Get a tile, get its neighbors, fitness evaluation, etc...
+
+---
+
+
+class: center, middle
+
+# Questions?
+
+---
+
+class: center, middle
+
+
+Slides were made with http://remarkjs.com/
+
+Source for slides can be found at https://github.com/okcpython/pipes
+
+Heavily borrowed from slides found at https://github.com/okcpython/python3-slow-migration
+
+</textarea>
+<!--<script src="https://cdn.rawgit.com/gnab/remark/gh-pages/downloads/remark-0.6.3.min.js" type="text/javascript"></script>-->
+<!-- Uncomment this if there is no internet -->
+
+<script src="remark-0.6.3.min.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    var slideshow = remark.create(      {
+                // Navigation options
+                navigation: {
+                    // Enable or disable navigating using scroll
+                    // Default: true
+                    // Alternatives: false
+                    scroll: false,
+                }
+            }
+    );
+</script>
+</body>
+</html>
